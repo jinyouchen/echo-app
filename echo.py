@@ -1,4 +1,4 @@
-import sys 
+import sys # Echo App: Supports normal output and shout mode (-s flag)
 def echo(): 
     shout = "-s" in sys.argv 
     message = input("Please enter something: ") 
