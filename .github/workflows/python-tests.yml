@@ -1,21 +1,27 @@
-            - name: Build Python Application Standalone Package
-  # You may pin to the exact commit or the version.
-  # uses: BHznJNs/pystand-build@1fd33caf0c201d60830545b01b8ea7b3808ce9f5
-  uses: BHznJNs/pystand-build@release-6
-  with:
-    # The application name of standalone package.
-    application-name: 
-    # The application type, must be one of 'CLI' and 'GUI'.
-    application-type: # optional, default is GUI
-    # The target Python embedded version to use.
-    python-version: # default is 3.11.9
-    # The entry file path for PyStand.
-    pystand-entry-file: # optional, default is PyStand.py
-    # The path to the requirements.txt file.
-    requirements-path: 
-    # Directories and files to be included in the build directory.
-For directories, they will be copied to <build-directory>/<directory-name>;
-for files, they will be copied to <build-directory>/
+name: Python Tests
 
-    included-files: 
+# 触发时机：feature/*或dev分支有push、PR到dev分支时
+on:
+  push:
+    branches: [ "feature/**", "dev" ]
+  pull_request:
+    branches: [ "dev" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # 使用Ubuntu环境
+    
+    steps:
+    - uses: actions/checkout@v4  # 拉取代码到工作流环境
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"  # 与Dockerfile一致的Python版本
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt  # 安装依赖
+    - name: Test with pytest
+      run: |
+        pytest tests/test_app.py -v  # 执行测试并显示详细日志
           
